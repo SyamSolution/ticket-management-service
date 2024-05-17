@@ -1,0 +1,7 @@
+CREATE TABLE event (
+    event_id INT AUTO_INCREMENT PRIMARY KEY,
+    date TIMESTAMP,
+    description TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
