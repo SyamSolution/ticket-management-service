@@ -2,6 +2,7 @@ package handler
 
 import (
 	"github.com/SyamSolution/ticket-management-service/config"
+	"github.com/SyamSolution/ticket-management-service/internal/model"
 	"github.com/SyamSolution/ticket-management-service/internal/usecase"
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
@@ -27,22 +28,31 @@ func (handler *ticketHandler) GetAvailableTicketByContinent(c *fiber.Ctx) error 
 	decodedContinent, err := url.QueryUnescape(continent)
 	if err != nil {
 		handler.logger.Error("Error when unescaping continent", zap.Error(err))
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
+		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
+			Meta: model.Meta{
+				Code:    fiber.StatusInternalServerError,
+				Message: err.Error(),
+			},
 		})
 	}
 
 	tickets, err := handler.ticketUsecase.GetAvailableTicketByContinent(decodedContinent)
 	if err != nil {
 		handler.logger.Error("Error when getting available ticket by continent", zap.Error(err))
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
+		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
+			Meta: model.Meta{
+				Code:    fiber.StatusInternalServerError,
+				Message: err.Error(),
+			},
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Success",
-		"data":    tickets,
+	return c.Status(fiber.StatusOK).JSON(model.Response{
+		Data: tickets,
+		Meta: model.Meta{
+			Code:    fiber.StatusOK,
+			Message: "Success",
+		},
 	})
 }
 
@@ -51,21 +61,30 @@ func (handler *ticketHandler) GetAvailableTicketByType(c *fiber.Ctx) error {
 	decodedTicketType, err := url.QueryUnescape(ticketType)
 	if err != nil {
 		handler.logger.Error("Error when unescaping ticket type", zap.Error(err))
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
+		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
+			Meta: model.Meta{
+				Code:    fiber.StatusInternalServerError,
+				Message: err.Error(),
+			},
 		})
 	}
 
 	tickets, err := handler.ticketUsecase.GetAvailableTicketByType(decodedTicketType)
 	if err != nil {
 		handler.logger.Error("Error when getting available ticket by type", zap.Error(err))
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
+		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
+			Meta: model.Meta{
+				Code:    fiber.StatusInternalServerError,
+				Message: err.Error(),
+			},
 		})
 	}
 
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{
-		"message": "Success",
-		"data":    tickets,
+	return c.Status(fiber.StatusOK).JSON(model.Response{
+		Data: tickets,
+		Meta: model.Meta{
+			Code:    fiber.StatusOK,
+			Message: "Success",
+		},
 	})
 }
