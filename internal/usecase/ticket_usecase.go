@@ -15,6 +15,7 @@ type ticketUsecase struct {
 type TicketExecutor interface {
 	GetAvailableTicketByContinent(continent string) ([]model.TicketResponse, error)
 	GetAvailableTicketByType(ticketType string) ([]model.TicketResponse, error)
+	UpdateStockTicket(ticketID, order int, typeStock string) error
 }
 
 func NewTicketUsecase(ticketRepo repository.TicketPersister, logger config.Logger) TicketExecutor {
@@ -67,4 +68,29 @@ func (uc *ticketUsecase) GetAvailableTicketByType(ticketType string) ([]model.Ti
 		})
 	}
 	return TicketsResponse, nil
+}
+
+func (uc *ticketUsecase) UpdateStockTicket(ticketID, order int, typeStock string) error {
+	switch typeStock {
+	case "create":
+		if err := uc.ticketRepo.UpdateStockCreateOrderTicket(ticketID, order); err != nil {
+			uc.logger.Error("Error when updating stock ticket", zap.Error(err))
+			return err
+		}
+		return nil
+	case "success":
+		if err := uc.ticketRepo.UpdateStockSuccessOrderTicket(ticketID, order); err != nil {
+			uc.logger.Error("Error when updating stock ticket", zap.Error(err))
+			return err
+		}
+		return nil
+	case "failed":
+		if err := uc.ticketRepo.UpdateStockFailOrderTicket(ticketID, order); err != nil {
+			uc.logger.Error("Error when updating stock ticket", zap.Error(err))
+			return err
+		}
+		return nil
+	}
+
+	return nil
 }
