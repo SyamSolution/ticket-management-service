@@ -4,6 +4,7 @@ import (
 	"github.com/SyamSolution/ticket-management-service/config"
 	"github.com/SyamSolution/ticket-management-service/internal/model"
 	"github.com/SyamSolution/ticket-management-service/internal/usecase"
+	"github.com/SyamSolution/ticket-management-service/internal/util"
 	"github.com/gofiber/fiber/v2"
 	"go.uber.org/zap"
 	"net/url"
@@ -31,7 +32,7 @@ func (handler *ticketHandler) GetAvailableTicketByContinent(c *fiber.Ctx) error 
 		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
 			Meta: model.Meta{
 				Code:    fiber.StatusInternalServerError,
-				Message: err.Error(),
+				Message: util.ERROR_BASE_MSG,
 			},
 		})
 	}
@@ -42,7 +43,7 @@ func (handler *ticketHandler) GetAvailableTicketByContinent(c *fiber.Ctx) error 
 		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
 			Meta: model.Meta{
 				Code:    fiber.StatusInternalServerError,
-				Message: err.Error(),
+				Message: util.ERROR_BASE_MSG,
 			},
 		})
 	}
@@ -64,7 +65,7 @@ func (handler *ticketHandler) GetAvailableTicketByType(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
 			Meta: model.Meta{
 				Code:    fiber.StatusInternalServerError,
-				Message: err.Error(),
+				Message: util.ERROR_BASE_MSG,
 			},
 		})
 	}
@@ -75,7 +76,7 @@ func (handler *ticketHandler) GetAvailableTicketByType(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusInternalServerError).JSON(model.ResponseWithoutData{
 			Meta: model.Meta{
 				Code:    fiber.StatusInternalServerError,
-				Message: err.Error(),
+				Message: util.ERROR_BASE_MSG,
 			},
 		})
 	}
