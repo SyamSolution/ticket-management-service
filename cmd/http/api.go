@@ -71,6 +71,9 @@ func main() {
 	app.Use(fiberProm.Middleware)
 
 	//=== ticket routes ===//
+	app.Get("/continent/tickets/:continent", ticketHandler.GetTicketByContinent)
+	app.Get("/tickets/continent-stock", ticketHandler.GetStockTicketGroupByContinent)
+	app.Get("/event/ticket/:ticket_id", ticketHandler.GetTicketEventByTicketID)
 	app.Group("/", middleware2.Auth())
 	app.Get("/tickets/continent/:continent", ticketHandler.GetAvailableTicketByContinent)
 	app.Get("/tickets/type/:type", ticketHandler.GetAvailableTicketByType)
