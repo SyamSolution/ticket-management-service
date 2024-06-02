@@ -2,10 +2,11 @@ package main
 
 import (
 	"fmt"
-	"github.com/IBM/sarama"
+	"log"
+	"os"
+
 	"github.com/SyamSolution/ticket-management-service/config"
 	"github.com/SyamSolution/ticket-management-service/config/middleware"
-	middleware2 "github.com/SyamSolution/ticket-management-service/config/middleware"
 	"github.com/SyamSolution/ticket-management-service/internal/consumer"
 	"github.com/SyamSolution/ticket-management-service/internal/handler"
 	"github.com/SyamSolution/ticket-management-service/internal/repository"
@@ -13,8 +14,6 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
-	"log"
-	"os"
 )
 
 func main() {
@@ -41,24 +40,7 @@ func main() {
 	ticketHandler := handler.NewTicketHandler(ticketUsecase, baseDep.Logger)
 	//=== handler lists end ===//
 
-	configKafka := sarama.NewConfig()
-	configKafka.Consumer.Return.Errors = true
-
-	brokers := []string{os.Getenv("KAFKA_BROKER")}
-	master, err := sarama.NewConsumer(brokers, configKafka)
-	if err != nil {
-		log.Panicf("Error creating consumer: %s", err)
-	}
-	defer func() {
-		if err := master.Close(); err != nil {
-			log.Panicf("Error closing consumer: %s", err)
-		}
-	}()
-
-	log.Println("Connected to Kafka broker")
-
-	doneCh := make(chan struct{})
-	go consumer.Consumer(master, doneCh, ticketUsecase)
+	go consumer.StartConsumer(ticketUsecase)
 
 	app := fiber.New()
 
@@ -74,19 +56,14 @@ func main() {
 	app.Get("/continent/tickets/:continent", ticketHandler.GetTicketByContinent)
 	app.Get("/tickets/continent-stock", ticketHandler.GetStockTicketGroupByContinent)
 	app.Get("/event/ticket/:ticket_id", ticketHandler.GetTicketEventByTicketID)
-	app.Group("/", middleware2.Auth())
+	app.Group("/", middleware.Auth())
 	app.Get("/tickets/continent/:continent", ticketHandler.GetAvailableTicketByContinent)
 	app.Get("/tickets/type/:type", ticketHandler.GetAvailableTicketByType)
 
 	//=== listen port ===//
-	go func() {
-		if err := app.Listen(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))); err != nil {
-			log.Fatal(err)
-		}
-	}()
-
-	// untuk blocking function
-	<-doneCh
+	if err := app.Listen(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func loadEnv(logger config.Logger) {
