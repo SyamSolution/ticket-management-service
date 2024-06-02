@@ -142,19 +142,19 @@ func StartConsumer(ticketUsecase usecase.TicketExecutor) {
         go workerTicket(client, os.Getenv("SQS_TICKET_URL"), &wg, ticketUsecase, "create")
     }
 
-    // for i := 0; i < workerCount; i++ {
-    //     wg.Add(1)
-    //     go workerDeadLetter(client, os.Getenv("SQS_TICKET_DLQ_URL"), &wg, ticketUsecase, "create")
-    // }
+    for i := 0; i < workerCount; i++ {
+        wg.Add(1)
+        go workerDeadLetter(client, os.Getenv("SQS_TICKET_DLQ_URL"), &wg, ticketUsecase, "create")
+    }
+
+    for i := 0; i < workerCount; i++ {
+        wg.Add(1)
+        go workerDeadLetter(client, os.Getenv("SQS_TICKET_FAILED_DLQ_URL"), &wg, ticketUsecase,  "failed")
+    }
 
     // for i := 0; i < workerCount; i++ {
     //     wg.Add(1)
-    //     go workerDeadLetter(client, os.Getenv("SQS_TICKET_FAILED_DLQ_URL"), &wg, ticketUsecase,  "success")
-    // }
-
-    // for i := 0; i < workerCount; i++ {
-    //     wg.Add(1)
-    //     go workerDeadLetter(client, os.Getenv("SQS_TICKET_SUCCESS_DLQ_URL"), &wg, ticketUsecase,  "failed")
+    //     go workerDeadLetter(client, os.Getenv("SQS_TICKET_SUCCESS_DLQ_URL"), &wg, ticketUsecase,  "success")
     // }
 
     wg.Wait()
