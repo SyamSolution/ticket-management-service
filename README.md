@@ -1,4 +1,4 @@
-# Ticket Trasaction Service
+# Ticket Management Service
 
 ## Name
 
