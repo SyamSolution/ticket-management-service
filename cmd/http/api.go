@@ -2,17 +2,18 @@ package main
 
 import (
 	"fmt"
+	"log"
+	"os"
+
 	"github.com/SyamSolution/ticket-management-service/config"
 	"github.com/SyamSolution/ticket-management-service/config/middleware"
-	middleware2 "github.com/SyamSolution/ticket-management-service/config/middleware"
+	"github.com/SyamSolution/ticket-management-service/internal/consumer"
 	"github.com/SyamSolution/ticket-management-service/internal/handler"
 	"github.com/SyamSolution/ticket-management-service/internal/repository"
 	"github.com/SyamSolution/ticket-management-service/internal/usecase"
 	"github.com/gofiber/fiber/v2"
 	"github.com/joho/godotenv"
 	"github.com/prometheus/client_golang/prometheus"
-	"log"
-	"os"
 )
 
 func main() {
@@ -25,7 +26,7 @@ func main() {
 
 	dbCollector := middleware.NewStatsCollector("assesment", DB)
 	prometheus.MustRegister(dbCollector)
-	fiberProm := middleware.NewWithRegistry(prometheus.DefaultRegisterer, "smilley", "", "", map[string]string{})
+	fiberProm := middleware.NewWithRegistry(prometheus.DefaultRegisterer, "ticket-management-service", "", "", map[string]string{})
 
 	//=== repository lists start ===//
 	ticketRepo := repository.NewTicketRepository(DB, baseDep.Logger)
@@ -39,6 +40,8 @@ func main() {
 	ticketHandler := handler.NewTicketHandler(ticketUsecase, baseDep.Logger)
 	//=== handler lists end ===//
 
+	go consumer.StartConsumer(ticketUsecase)
+
 	app := fiber.New()
 
 	app.Get("/", func(c *fiber.Ctx) error {
@@ -50,12 +53,15 @@ func main() {
 	app.Use(fiberProm.Middleware)
 
 	//=== ticket routes ===//
-	app.Group("/", middleware2.Auth())
+	app.Get("/continent/tickets/:continent", ticketHandler.GetTicketByContinent)
+	app.Get("/tickets/continent-stock", ticketHandler.GetStockTicketGroupByContinent)
+	app.Get("/event/ticket/:ticket_id", ticketHandler.GetTicketEventByTicketID)
+	app.Group("/", middleware.Auth())
 	app.Get("/tickets/continent/:continent", ticketHandler.GetAvailableTicketByContinent)
 	app.Get("/tickets/type/:type", ticketHandler.GetAvailableTicketByType)
 
 	//=== listen port ===//
-	if err := app.Listen(fmt.Sprintf(":%s", "3001")); err != nil {
+	if err := app.Listen(fmt.Sprintf(":%s", os.Getenv("APP_PORT"))); err != nil {
 		log.Fatal(err)
 	}
 }

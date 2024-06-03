@@ -1,0 +1,25 @@
+mode: set
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:31.57,35.2 3 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:38.55,40.2 1 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:43.65,46.27 3 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:46.27,48.3 1 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:49.2,49.37 1 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:53.78,57.2 3 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:60.64,63.27 3 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:63.27,65.3 1 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:66.2,66.36 1 0
+github.com/SyamSolution/ticket-management-service/mock/config/logger_mock.go:70.77,74.2 3 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:31.73,35.2 3 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:38.71,40.2 1 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:43.110,49.2 5 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:52.101,55.2 2 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:58.106,64.2 5 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:67.97,70.2 2 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:73.92,79.2 5 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:82.89,85.2 2 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:88.101,94.2 5 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:97.92,100.2 2 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:103.96,109.2 5 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:112.95,115.2 2 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:118.93,123.2 4 0
+github.com/SyamSolution/ticket-management-service/mock/ticket_usecase_mock.go:126.106,129.2 2 0
